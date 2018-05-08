@@ -24,28 +24,35 @@ class App extends React.Component {
     super(props)
     this.state = {
       data: [],
-      isLoading: true
+      isLoading: true,
+      width: Dimensions.get('window').width,
+      height: Dimensions.get('window').height
     }
   }
   componentDidMount() {
     this.api.getDataByFilter('size', this.setDataState)
     document.addEventListener('scroll', this.handleScroll)
+    window.addEventListener('resize', this.handleChangeScreenSize)
   }
 
   render() {
     return (
-      <View style = {styles.background}>
+      <View style = {[styles.background, {width: this.state.width, height: this.state.height}]}>
         <Filter loading={this.state.isLoading} newFilter={ (filter) => {
           this.currentFilter = filter
           this.transitionScreen()
           this.api.amount = 30
           this.api.getDataByFilter(filter, this.setDataState)
         }}/>
-        <Animatable.View ref={val => this.background = val} style = {{top: 100}}>
+        <Animatable.View ref={val => this.background = val} style = {{top:100}}>
           {this.getBaseScreen(this.state.isLoading)}
         </Animatable.View>
       </View>
     );
+  }
+
+  handleChangeScreenSize = () => {
+    this.setState({width: Dimensions.get('window').width, height: Dimensions.get('window').height})
   }
 
   handleScroll = () => {
