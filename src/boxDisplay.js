@@ -12,7 +12,6 @@ export default class Box extends React.Component {
         this.state = {
            screen: ScreenTypes.face
         }
-        this.getDate(this.props.item.date)
     }
 
     render() {
